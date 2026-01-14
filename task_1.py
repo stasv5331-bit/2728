@@ -156,16 +156,20 @@ def task1_menu_fp():
             print("Второй массив:", state["arr2"]),
             logger.info("task1: массивы сгенерированы")
         ),
-        "3": lambda: (  # Выполнение алгоритма
+                "3": lambda: (  # Выполнение алгоритма
             # Проверяем, что массивы заданы
             (_ for _ in ()).throw(ValidationError("Массивы не заданы")) 
             if None in (state["arr1"], state["arr2"]) else
             # Выполняем алгоритм
-            (result, sorted1, sorted2 := execute_task_1_fp(state["arr1"], state["arr2"])),
-            # Сохраняем результаты в состояние
-            state.update({"result": result, "sorted1": sorted1, "sorted2": sorted2}),
-            print(msgs["calculation_done"]),  # Сообщаем об успехе
-            logger.info("task1: алгоритм выполнен")
+            (lambda res: (
+                state.update({
+                    "result": res[0], 
+                    "sorted1": res[1], 
+                    "sorted2": res[2]
+                }),
+                print(msgs["calculation_done"]),
+                logger.info("task1: алгоритм выполнен")
+            ))(execute_task_1_fp(state["arr1"], state["arr2"]))
         ),
         "4": lambda: (  # Показ результатов
             # Проверяем, что результаты вычислены
